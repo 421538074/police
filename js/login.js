@@ -1,0 +1,69 @@
+var xm = new Vue({
+    el: "#app",
+    data: {
+        isrole: true, //选择登录角色
+        ispolice: false, //警员登录
+        ismatron: false, //管理登录
+        isorder: false, //接单员登录
+        Oname: '',
+        Opsw: '',
+        ip: '',
+        Pname: '',
+        Ppsw: '',
+    },
+    methods: {
+        goBack() {
+            this.ispolice = false
+            this.ismatron = false
+            this.isorder = false
+            this.isrole = true
+        },
+        goOrder() {
+            this.isrole = false
+            this.isorder = true
+        },
+        goPolice() {
+            this.isrole = false
+            this.ispolice = true
+        },
+        goMatron() {
+            this.isrole = false
+            this.ismatron = true
+        },
+        orderEnter() { //接单员登录
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/receiverLogin`,
+                async: true,
+                data: {
+                    name: this.Oname,
+                    password: this.Opsw
+                },
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                }
+            })
+        },
+        policeEnter() { //警员登录
+            // console.log(this.ip)
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/policeLogin`,
+                async: true,
+                data: {
+                    ip: this.ip,
+                    name: this.Pname,
+                    password: this.Ppsw
+                },
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                }
+            })
+        }
+    },
+    created() {
+
+    }
+})
