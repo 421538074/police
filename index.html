@@ -188,7 +188,7 @@
                                 </li>
                                 <li v-for="(item,index) in allList">
                                     <span>{{item.title}} {{item.create_at}}</span>
-                                    <span>{{item.status}}</span>
+                                    <span :class="{red:item.status==0}">{{item.status==0?"未解决":"已解决"}}</span>
                                     <span>{{item.name}}</span>
                                 </li>
                             </ul>
@@ -396,9 +396,7 @@
                 <div class="Croom_main">
                     <div class="Croom_main_left">
                         <ul class="Croom_uu">
-                            <li v-for="(item,index) in allRoom" 
-                            :class="{white:index==current}"
-                                @click="goRoom(index)">
+                            <li v-for="(item,index) in allRoom" :class="{white:index==current}" @click="goRoom(index)">
                                 {{item.topic_name}}
                             </li>
                         </ul>

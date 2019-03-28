@@ -1925,6 +1925,9 @@ td {
     color: white !important;
 }
 
+.red {
+    color:red!important;
+}
 .bod {
     overflow: hidden;
 }

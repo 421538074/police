@@ -53,7 +53,8 @@
             </div>
 
             <!-- 插件中心 -->
-            <div class="plug" id="go1">
+            <div class="plug">
+                <p id="go1"></p>
                 <h4>插件中心</h4>
                 <ul class="plug_uu">
                     <li v-for="(item,index) in plugList" @click="openChange(index)">
@@ -64,7 +65,8 @@
                 <div class="zxf" v-show="isPage"></div>
             </div>
             <!-- 音乐中心 -->
-            <div class="music" id="go2">
+            <div class="music">
+                <p id="go2"></p>
                 <h4>音乐中心</h4>
                 <div class="music_nav">
                     <div class="music_one" v-for="item in musicSort">
@@ -124,7 +126,8 @@
 
 
             <!-- 书籍中心 -->
-            <div class="book" id="go3">
+            <div class="book">
+                <p id="go3"></p>
                 <div class="book_left">
                     <div class="book_left_text">
                         书籍中心

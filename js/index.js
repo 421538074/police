@@ -369,6 +369,7 @@ var xm = new Vue({
             }
             var list = this.ForumCate
             var id = list[index].id
+            console.log(id)
             $.ajax({
                 type: "post",
                 url: `${api}/index/api/getForumList`,
@@ -376,7 +377,9 @@ var xm = new Vue({
                     cate_id: id
                 },
                 dataType: 'json',
-                success: (res) => {}
+                success: (res) => {
+                    this.titleList =res.result
+                }
             })
         },
         pulishChange() { //发布论坛
