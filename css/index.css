@@ -1428,9 +1428,9 @@
 /* 全部报备 */
 .allReply {
     width: 896px;
-    height: 913px;
+    height: 75%;
     background: rgba(255, 255, 255, 1);
-    border-radius: 40px;
+    border-radius: 10px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1597,13 +1597,20 @@ td {
 /* 查看回复 */
 .see {
     width: 700px;
-    /* height: 953px; */
+    height: 75%;
     background: rgba(255, 255, 255, 1);
-    border-radius: 30px;
+    border-radius: 10px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width:0;
+    -ms-overflow-style: none;
+}
+.see::-webkit-scrollbar{
+    width: 0;
 }
 
 .see_text {

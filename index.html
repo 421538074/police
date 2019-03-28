@@ -124,11 +124,11 @@
                                        {{comment.content}}
                                     </p>
                                     <div class="reply">
-                                        <span class="pointer" @click="likePostOrComment('',comment.id,1)">
+                                        <span class="pointer" @click="likePostOrComment('',comment.id,0)">
                                             <img src="img/icon-06.png" alt="">
                                             {{comment.phraise}}赞</span>
                                         <span @click="lookchange(item.id,comment.id)" class="pointer">查看回复</span>
-                                        <span @click="gospeak(item.id,comment.id,index)" class="pointer">回复</span>
+                                        <span @click="gospeak(index)" class="pointer">回复</span>
                                     </div>
 
                                     <div class="reply_one" v-if="currentActive==index">
@@ -186,7 +186,7 @@
                                 </li>
                                 <li v-for="(item,index) in allList">
                                     <span>{{item.title}} {{item.create_at}}</span>
-                                    <span :class="{red:item.status==0}">{{item.status==0?"未解决":"已解决"}}</span>
+                                    <span :class="{red:item.status==0}">{{item.name == null ? '未接单' : item.status == 0 ? '未解决' : '已解决'}}</span>
                                     <span>{{item.name}}</span>
                                 </li>
                             </ul>
@@ -534,14 +534,14 @@
                             <div class="see_uu_three">
                                 <div class="see_uu_btn">
                                     <img src="img/icon-06.png" alt="">
-                                    <span>12赞</span>
+                                    <span @click="likePostOrComment('',item.id,1)" class="pointer">{{item.phraise}}赞</span>
                                 </div>
-                                <span @click="gospeak1(index)">回复</span>
+                                <span @click="gospeak1(index)" class="pointer">回复</span>
                             </div>
                             <div class="see_inp" v-show="oneIndex == index">
-                                <input type="text">
+                                <input v-model="replyComment" type="text">
                                 <span></span>
-                                <span>发布</span>
+                                <span class="pointer" @click="commentChange(currentPostId,item.id,item.uid,1)">发布</span>
                             </div>
                         </li>
                         <ul v-for="one in item.child">
