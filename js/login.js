@@ -12,25 +12,25 @@ var xm = new Vue({
         Ppsw: '',
     },
     methods: {
-        goBack() {
+        goBack:function() {
             this.ispolice = false
             this.ismatron = false
             this.isorder = false
             this.isrole = true
         },
-        goOrder() {
+        goOrder:function() {
             this.isrole = false
             this.isorder = true
         },
-        goPolice() {
+        goPolice:function() {
             this.isrole = false
             this.ispolice = true
         },
-        goMatron() {
+        goMatron:function() {
             this.isrole = false
             this.ismatron = true
         },
-        orderEnter() { //接单员登录
+        orderEnter:function() { //接单员登录
             $.ajax({
                 type: "post",
                 url: `${api}/index/api/receiverLogin`,
@@ -40,12 +40,12 @@ var xm = new Vue({
                     password: this.Opsw
                 },
                 dataType: 'json',
-                success: (res) => {
+                success: function(res){
                     console.log(res)
                 }
             })
         },
-        policeEnter() { //警员登录
+        policeEnter:function() { //警员登录
             // console.log(this.ip)
             $.ajax({
                 type: "post",
@@ -57,7 +57,7 @@ var xm = new Vue({
                     password: this.Ppsw
                 },
                 dataType: 'json',
-                success: (res) => {
+                success: function(res) {
                     console.log(res)
                 }
             })

@@ -7,6 +7,7 @@ var xm = new Vue({
         isanswer: false,
         isUser: false,
         isPage: true,
+        istotur: false,
         plugList: [],
         bookList: [],
         tutorialList: [],
@@ -15,12 +16,17 @@ var xm = new Vue({
         musicSort: [], //音乐分类
         bookSort: [], //书籍分类
         tutorialSort: [], //教程分类
+        current: 0,
         description: '',
         create_at: '',
         name: '',
         data_url: '',
         picture: '',
         download_status: '',
+        Tdescription: '',
+        Tname: '',
+        Tpicture: '',
+        Tdata_url: '',
     },
     methods: {
         gouser() { //跳转我的主页
@@ -33,6 +39,7 @@ var xm = new Vue({
             this.isanswer = !this.isanswer
         },
         bookChange(index) { //书籍分类
+            this.current = index
             var list = this.bookSort
             var book_id = list[index].id
             $.ajax({
@@ -51,6 +58,8 @@ var xm = new Vue({
             })
         },
         turtorChange(index) { //教程分类
+            $(".book_left_uu .Pne").removeClass("white")
+            this.current = index
             var list = this.tutorialSort
             var tutorial_id = list[index].id
             $.ajax({
@@ -100,7 +109,7 @@ var xm = new Vue({
                 }
             })
         },
-        openChange(index) {
+        openChange(index) { //详情页
             var list = this.plugList
             var tool_id = list[index].id
             $.ajax({
@@ -114,20 +123,74 @@ var xm = new Vue({
                 success: (res) => {
                     console.log(res)
                     this.isshade = true
-                    this.isbook = true
+                    this.isplug = true
                     this.create_at = res.data.create_at
-                    this.description = res.data.create_at
+                    this.description = res.data.description
                     this.name = res.data.name
                     this.picture = res.data.picture
                     this.data_url = res.data.data_url
                     this.download_status = res.data.download_status
+                    sessionStorage.setItem('url', JSON.stringify(res.data.data_url))
+                    // console.log(res.data.data_url)
                 }
             })
         },
-        upDown(data_url) {
-            console.log(data.url)
-            // window.open(data_url)
-            console.log(window.open(data_url))
+        bookDown(index) { //书记闲情
+            var list = this.bookList
+            var tool_id = list[index].id
+            console.log(tool_id)
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/toolDetail`,
+                async: true,
+                data: {
+                    tool_id: tool_id
+                },
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                    this.isshade = true
+                    this.isbook = true
+                    this.create_at = res.data.create_at
+                    this.description = res.data.description
+                    this.name = res.data.name
+                    this.picture = res.data.picture
+                    this.data_url = res.data.data_url
+                    this.download_status = res.data.download_status
+                    sessionStorage.setItem('url', JSON.stringify(res.data.data_url))
+                }
+            })
+        },
+        Tdown(index) { //教程详情页 
+            var list = this.tutorialList
+            var tutorial_id = list[index].id
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/tutorialDetail`,
+                async: true,
+                data: {
+                    tutorial_id: tutorial_id
+                },
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                    this.isshade = true
+                    this.istotur = true
+                    this.Tdescription = res.data.description
+                    this.Tname = res.data.tutorial_name
+                    this.Tpicture = res.data.picture
+                    this.Tdata_url = res.data.tutorial_url
+                    this.Tdownload_status = res.data.download_status
+                    sessionStorage.setItem('url', JSON.stringify(res.data.data_url))
+                }
+            })
+        },
+        upDown() {
+            var url = sessionStorage.getItem('url')
+            url = url.replace("\"", "").replace("\"", "");;
+            console.log(url)
+            var down = api + "/" + url
+            window.open(down)
         }
     },
     components: {
@@ -173,6 +236,13 @@ $(function () {
     })
 });
 
+
+$(".book_left_uu li").each(function (index) {
+    $(this).click(function () {
+        $("li.white").removeClass("white");
+        $(this).addClass("white");
+    });
+})
 
 
 

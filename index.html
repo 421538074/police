@@ -396,7 +396,8 @@
                 <div class="Croom_main">
                     <div class="Croom_main_left">
                         <ul class="Croom_uu">
-                            <li v-for="(item,index) in allRoom" :class="{white:index==current}" @click="goRoom(index)">
+                            <li v-for="(item,index) in allRoom" 
+                            :class="{white:index==current}" @click="goRoom(index)">
                                 {{item.topic_name}}
                             </li>
                         </ul>
