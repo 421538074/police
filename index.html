@@ -10,6 +10,113 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/page/zxf_page.css" />
     <link rel="stylesheet" href="css/page/iconfont.css">
+    <style>
+        .banner_uu li{
+            font-size: 16px;
+            position: inherit;
+        }
+        .content{
+            padding-top:4.3%;
+        }
+        .content_list{
+            padding: 20px 31px 20px 20px;
+        }
+        .content_list h4{
+            font-size: 18px;
+            margin-bottom: 9px;
+        }
+        .content_list .content_text{
+            font-size: 16px;
+        }
+        .comment ul li, .comment ul li:nth-child(1) span{
+            font-size: 14px;
+        }
+        .comment ul li img{
+            width:10px;
+            height: 10px;
+        }
+        .make_uu li img{
+            width:30px;
+            height: 30px;
+        }
+        .make_uu li p{
+            color: #444;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .make_uu{
+            padding: 10px 0px;
+        }
+        .make_uu li,.content_make{
+            height: auto;
+        }
+        .make_uu li:nth-child(1){
+            height: auto;
+        }
+        .report_banner ul{
+            height: auto;
+            font-size: 16px;
+        }
+        .report_list_uu{
+            font-size: 16px;
+        }
+        .appCenter,.chat_room_uu, .chat_user,.chatRoom,.report_list_uu,.report{
+            height: auto;
+        }
+        .chatRoom{
+            margin-top: 10px;
+        }
+        .chat_more{
+            line-height: 2.5;
+        }
+        .chat_user{
+            padding: 15px 27px 15px 17px;
+            margin-top: 10px;
+            border-bottom: 0;
+        }
+        .app_uu li{
+            text-align: center;
+        }
+        .app_uu li img{
+            width: 30px;
+            height: 30px;
+        }
+        .app_logo{
+            margin-top: 0;
+        }
+        .index_content a img{
+            width:70%;
+        }
+        .index_header{
+            height: auto;
+            padding: 15px 0px;
+            position: fixed;
+        }
+        .search{
+            background: #eee;
+        }
+        .content_list .content_text{
+            line-height: 1.67;
+            cursor: pointer;
+        }
+
+        .comment{
+            margin-top: 9px;
+        }
+        .chat_more .left{
+            float: left;
+        }
+        .chat_more .right{
+            float: right;
+        }
+        .chat_room_uu li{
+            height: 50px;
+        }
+        .chat_room_uu_right{
+            width: 65px;
+            height: 28px;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,7 +129,7 @@
                     <img src="img/首页logo.png" alt="">
                 </a>
                 <div class="header_mid">
-                    <input class="search" type="text" v-model="keyWords">
+                    <input class="search" type="text" v-model="keyWords" placeholder="搜索关键词">
                     <span @click="searchChange"></span>
                 </div>
                 <div class="header_img" @click="goAnswer">
@@ -109,11 +216,11 @@
                                         2月28日，在《反家暴法》实施三周年前夕，南京市第十届家庭学法竞赛启动
                                     </p>
                                     <div class="reply">
-                                        <span>
+                                        <span class="pointer" @click="likePostOrComment('',comment.id,0)">
                                             <img src="img/icon-06.png" alt="">
-                                            13赞</span>
-                                        <span @click="lookchange">查看回复</span>
-                                        <span @click="gospeak(index)">回复</span>
+                                            {{comment.phraise}}赞</span>
+                                        <span @click="lookchange(item.id,comment.id)" class="pointer">查看回复</span>
+                                        <span @click="gospeak(index)" class="pointer">回复</span>
                                     </div>
 
                                     <div class="reply_one" v-if="currentActive==index">
@@ -171,7 +278,7 @@
                                 </li>
                                 <li v-for="(item,index) in allList">
                                     <span>{{item.title}} {{item.create_at}}</span>
-                                    <span :class="{red:item.status==0}">{{item.status==0?"未解决":"已解决"}}</span>
+                                    <span :class="{red:item.status==0}">{{item.name == null ? '未接单' : item.status == 0 ? '未解决' : '已解决'}}</span>
                                     <span>{{item.name}}</span>
                                 </li>
                             </ul>
@@ -204,7 +311,7 @@
 
                     <!-- 应用中心 -->
                     <div class="appCenter">
-                        <h4>应用中心</h4>
+                        <!--<h4>应用中心</h4>-->
                         <div class="app_logo">
                             <ul class="app_uu">
                                 <li>
@@ -246,6 +353,59 @@
                             </ul>
                         </div>
                     </div>
+                    <!-- 聊天室 -->
+                    <div class="chatRoom">
+
+                        <div class="chat_room">
+                            <!--<div class="chat_user">
+                                <span>&lt;!&ndash;<img src="" alt="">&ndash;&gt;</span>
+                                <span>&lt;!&ndash;张三&ndash;&gt;</span>
+                                <span @click="creatChange"></span>
+                            </div>-->
+                            <div class="chat_more" ><span class="left" @click="creatChange">+创建聊天室</span><span class="right" @click="allChat">所有聊天室>></span>
+                            <div style="clear:both;"></div>
+                            </div>
+                            <ul class="chat_room_uu">
+                                <li v-for="(item,index) in chatList">
+                                    <div class="chat_room_uu_left">
+                                        <p>{{item.title}}</p>
+                                        <span>{{item.topic_name}}</span>
+                                        <span>13人正在聊天</span>
+                                    </div>
+                                    <div class="chat_room_uu_right" @click="goInchange(index)">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- 所有报备列表 -->
+                    <div class="report">
+                        <div class="report_banner">
+                            <ul>
+                                <li :class="{black:!isshow}" @click="tagChange">所有报备</li>
+                                <li :class="{black:isshow}" @click="tagChange">我的报备</li>
+                            </ul>
+                        </div>
+
+                        <div class="report_list">
+                            <ul class="report_list_uu">
+                                <li>
+                                    <p>报备内容</p>
+                                    <p>报备情况</p>
+                                    <p>处理人</p>
+                                </li>
+                                <li v-for="(item,index) in allList">
+                                    <span>{{item.title}} {{item.create_at}}</span>
+                                    <span :class="{red:item.status==0}">{{item.status==0?"未解决":"已解决"}}</span>
+                                    <span>{{item.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <p class="report_look" @click="allChange">查看全部>></p>
+                    </div>
+
                 </div>
             </div>
 
@@ -532,14 +692,14 @@
                             <div class="see_uu_three">
                                 <div class="see_uu_btn">
                                     <img src="img/icon-06.png" alt="">
-                                    <span>12赞</span>
+                                    <span @click="likePostOrComment('',item.id,1)" class="pointer">{{item.phraise}}赞</span>
                                 </div>
-                                <span @click="gospeak1(index)">回复</span>
+                                <span @click="gospeak1(index)" class="pointer">回复</span>
                             </div>
                             <div class="see_inp" v-show="oneIndex == index">
-                                <input type="text">
+                                <input v-model="replyComment" type="text">
                                 <span></span>
-                                <span>发布</span>
+                                <span class="pointer" @click="commentChange(currentPostId,item.id,item.uid,1)">发布</span>
                             </div>
                         </li>
                         <ul v-for="one in item.child">

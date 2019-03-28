@@ -25,7 +25,7 @@ var xm = new Vue({
         titleList: [{}, {}], //论坛列表
         allList: [], //报备列表
         infoList: [{}], //论坛关键词
-        list: [],
+        list: [],//报备列表
         chatList: [], //聊天列表
         roomList: [{}],
         comlist: [{}, {}], //评论列表
@@ -49,9 +49,10 @@ var xm = new Vue({
         Ctitle: '', //常用聊天室标题
         Ctopic_name: '', //常用聊天室标题
         roomName: '', //修改聊天室名称,
-        replyComment: '', //回复评论的内容,
-        currentComment: {} //当前查看的评论
-
+        replyComment:'',//回复评论的内容,
+        currentComment:{},//当前查看的评论,
+        currentPostId:'',
+        currentCommentId:''
     },
     methods: {
         goClose() { //关闭遮罩
@@ -90,11 +91,8 @@ var xm = new Vue({
         goAnswer() { //通知
             $(".answer").slideToggle("400");
         },
-        gospeak(post_id, comment_id, index) { //回复
-            this.currentActive = this.currentActive == index ? -1 : index;
-            this.post_id = post_id;
-            this.comment_id = comment_id;
-
+        gospeak(index) { //回复
+            this.currentActive = this.currentActive == index ? -1 : index;    
         },
         gospeak1(index) { //查看回复  回复
             this.oneIndex = this.oneIndex == index ? -1 : index
@@ -301,7 +299,9 @@ var xm = new Vue({
                 }
             })
         },
-        lookchange(post_id, comment_id) { //查看回复
+        lookchange(post_id,comment_id) { //查看回复
+            this.currentPostId = post_id;
+            this.currentCommentId = comment_id;
             this.currentComment = this.titleList.filter((posts) => {
                 return posts.id == post_id
             })[0].comment_list.filter((comments) => {
@@ -447,24 +447,31 @@ var xm = new Vue({
                 }
             })
         },
-        commentChange(post_id, comment_id) { //发布评论
-            if (comment_id) {
-                if (this.replyComment.trim() == '') {
+        commentChange(post_id,comment_id,uid,type) { //发布评论
+            if(comment_id) {
+                if(this.replyComment.trim() == '') {
                     alert('请输入回复内容');
                     return false;
                 }
                 $.ajax({
-                    url: `${api}/index/api/replayComment`,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        post_id: post_id,
-                        comment_id: comment_id,
-                        content: this.replyComment
+                    url:`${api}/index/api/replayComment`,
+                    type:'post',
+                    dataType:'json',
+                    data:{
+                        post_id:post_id,
+                        comment_id:comment_id,
+                        comment_uid:uid,
+                        content:this.replyComment
                     },
                     success: (res) => {
                         this.replyComment = '';
-                        this.currentActive = -1;
+                        if(type == 1) {
+                            this.oneIndex = -1;
+                            this.lookchange(this.currentPostId,this.currentCommentId);
+                        }
+                        else {
+                            this.currentActive = -1;
+                        }
                     },
                     error: (err) => {
 
@@ -520,8 +527,14 @@ var xm = new Vue({
                     post_id: post_id,
                     comment_id: comment_id
                 },
-                success: (res) => {
-                    this.bannerChange(this.currentIndex);
+                success:(res) => {
+                    if(type == 1) {
+                        //弹窗评论点赞
+                        this.lookchange(this.currentPostId,this.currentCommentId);
+                    }
+                    else {
+                        this.bannerChange(this.currentIndex);
+                    }
                 },
                 error: (err) => {
 
