@@ -525,6 +525,7 @@ var xm = new Vue({
             data: {},
             dataType: 'json',
             success: (res) => {
+                console.log(res)
                 this.chatList = res.data
             }
         })

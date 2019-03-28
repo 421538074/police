@@ -134,11 +134,11 @@
                     </div>
                     <div class="book_left_tag">
                         <ul class="book_left_uu">
-                            <li v-for="(item,index) in bookSort" @click="bookChange(index)">{{item.name}}</li>
+                            <li v-for="(item,index) in bookSort" :class="{white:index==current}"
+                                @click="bookChange(index)">{{item.name}}</li>
                         </ul>
                     </div>
                 </div>
-
                 <div class="book_right">
                     <div class="book_right_top">
                         <input type="text">
@@ -147,7 +147,8 @@
 
                     <div class="book_right_bot">
                         <ul class="book_uu">
-                            <li v-for="item in bookList">
+                            <li v-for="(item,index) in bookList"
+                             @click="bookDown(index)">
                                 <span><img src="" alt=""></span>
                                 <p>{{item.name}}</p>
                             </li>
@@ -166,9 +167,11 @@
                     </div>
                     <div class="book_left_tag">
                         <ul class="book_left_uu">
-                            <li v-for="(item,index) in tutorialSort" @click="turtorChange(index)">{{item.name}}</li>
-                            <li @click="Ychange">研判工具</li>
-                            <li @click="Jchange">技战法</li>
+                            <li v-for="(item,index) in tutorialSort" 
+                                :class="{white:index==current}"
+                                @click="turtorChange(index)">{{item.name}}</li>
+                            <li class="Pne" @click="Ychange">研判工具</li>
+                            <li class="Pne" @click="Jchange">技战法</li>
                         </ul>
                     </div>
                 </div>
@@ -181,7 +184,7 @@
 
                     <div class="book_right_bot">
                         <ul class="book_uu">
-                            <li v-for="item in tutorialList">
+                            <li v-for="(item,index) in tutorialList" @click="Tdown(index)">
                                 <span><img src="" alt=""></span>
                                 <p>{{item.name}}</p>
                             </li>
@@ -212,7 +215,7 @@
                 </p>
 
                 <div class="book_btn">
-                    <span @click="upDown(data_url)"></span>
+                    <span></span>
                     <span></span>
                 </div>
             </div>
@@ -224,23 +227,35 @@
                         <img src="" alt="">
                     </span>
                     <div class="book_name_right">
-                        <p>某某插件</p>
-                        <p>2019-03-12</p>
+                        <p>{{name}}</p>
+                        <p>{{create_at | filterTime}}</p>
                     </div>
 
                 </div>
                 <p class="book_shade_content">
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
-                    这事插件的介绍，这事插件的介绍，这事插件的介绍，
+                    {{description}}
                 </p>
-
-                <div class="plug_btn">
+                <div class="plug_btn" @click="upDown()">
                     <span></span>
+                </div>
+            </div>
+            <!-- 教程 -->
+            <div class="book_shade" v-show="istotur">
+                <div class="book_name">
+                    <span>
+                        <img src="" alt="">
+                    </span>
+                    <div class="book_name_right">
+                        <p>{{Tname}}</p>
+                        <!-- <p>{{create_at | filterTime}}</p> -->
+                    </div>
+
+                </div>
+                <p class="book_shade_content">
+                    {{Tdescription}}
+                </p>
+                <div class="totur_btn" @click="upDown()">
+                    查看
                 </div>
             </div>
         </div>
