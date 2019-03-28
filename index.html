@@ -95,9 +95,7 @@
                     <div class="content_scroll">
                         <div class="content_list" v-for="(item,index) in titleList">
                             <h4>{{item.title}}</h4>
-                            <p class="content_text" @click="readChange(item,index)" :class="{entable:item.entable}">
-                                {{item.content}}
-                            </p>
+                            <p class="content_text" @click="readChange(item,index)" :class="{entable:item.entable}" v-html="item.content"></p>
                             <div class="comment">
                                 <p>发布于{{item.create_at}}</p>
                                 <ul>
@@ -113,37 +111,37 @@
                                     </li>
                                     <li @click="comChange(index)">
                                         <img src="img/评论.png" alt="">
-                                        <span v-show="!iscomment">{{item.comment_count}}条评论</span>
+                                        <span v-show="!iscomment">{{item.comment_list.length}}条评论</span>
                                         <span v-show="iscomment">收起评论</span>
                                     </li>
                                 </ul>
                             </div>
 
                             <div class="comment_main" v-cloak v-show="commentActive ==index">
-                                <div class="comment_list" v-for="(item,index) in comlist">
-                                    <h5>张三</h5>
+                                <div class="comment_list" v-for="(comment,index) in item.comment_list">
+                                    <h5>{{comment.nickname}}</h5>
                                     <p>
-                                        2月28日，在《反家暴法》实施三周年前夕，南京市第十届家庭学法竞赛启动
+                                       {{comment.content}}
                                     </p>
                                     <div class="reply">
                                         <span>
                                             <img src="img/icon-06.png" alt="">
-                                            13赞</span>
-                                        <span @click="lookchange">查看回复</span>
-                                        <span @click="gospeak(index)">回复</span>
+                                            {{comment.phraise}}赞</span>
+                                        <span @click="lookchange(item.id,comment.id)" class="pointer">查看回复</span>
+                                        <span @click="gospeak(item.id,comment.id,index)" class="pointer">回复</span>
                                     </div>
 
                                     <div class="reply_one" v-if="currentActive==index">
-                                        <input type="text" placeholder="写下你的回复">
+                                        <input type="text" placeholder="写下你的回复" v-model="replyComment">
                                         <img src="img/表情.png" alt="">
-                                        <span>发布</span>
+                                        <span @click="commentChange(item.id,comment.id)">发布</span>
                                     </div>
                                 </div>
 
                                 <div class="comment_inp">
                                     <input type="text" v-model="Pcomment">
                                     <img src="img/表情.png" alt="">
-                                    <span @click="commentChange(index)">发布</span>
+                                    <span @click="commentChange(item.id)">发布</span>
                                 </div>
 
                             </div>
@@ -519,18 +517,16 @@
             <div class="see" v-show="isspeak">
                 <div class="see_text">
                     <div class="see_text_top">
-                        <h4>张三</h4>
-                        <span>2019-03-11 12:31</span>
+                        <h4>{{currentComment.nickname}}</h4>
+                        <span>{{currentComment.create_at | filterTime}}</span>
                     </div>
-                    <p>
-                        2月28日，在《反家暴法》实施三周年前夕
-                    </p>
+                    <p v-html="currentComment.content"></p>
                 </div>
                 <div class="see_main">
                     <ul class="see_uu" v-for="(item,index) in seelist">
                         <li>
                             <div class="see_uu_one">
-                                <h4>{{item.nickname}}回复张三</h4>
+                                <h4>{{item.nickname}}回复{{currentComment.nickname}}</h4>
                                 <span>{{item.create_at | filterTime}}</span>
                             </div>
                             <p v-html="item.content"></p>
@@ -617,7 +613,7 @@
             </div>
 
 
-            <div class="close" @click="goClose">
+            <div class="close pointer" @click="goClose">
             </div>
         </div>
         <!-- </transition> -->
