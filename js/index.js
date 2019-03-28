@@ -45,7 +45,9 @@ var xm = new Vue({
         Troom: '', //聊天室标题
         Ctitle: '', //常用聊天室标题
         Ctopic_name: '', //常用聊天室标题
-        roomName: '', //修改聊天室名称
+        roomName: '', //修改聊天室名称,
+        replyComment:'',//回复评论的内容,
+        currentComment:{}//当前查看的评论
 
     },
     methods: {
@@ -85,8 +87,11 @@ var xm = new Vue({
         goAnswer() { //通知
             $(".answer").slideToggle("400");
         },
-        gospeak(index) { //回复
-            this.currentActive = this.currentActive == index ? -1 : index
+        gospeak(post_id,comment_id,index) { //回复
+            this.currentActive = this.currentActive == index ? -1 : index;
+            this.post_id = post_id;
+            this.comment_id = comment_id;
+            
         },
         gospeak1(index) { //查看回复  回复
             this.oneIndex = this.oneIndex == index ? -1 : index
@@ -281,7 +286,12 @@ var xm = new Vue({
                 }
             })
         },
-        lookchange() { //查看回复
+        lookchange(post_id,comment_id) { //查看回复
+            this.currentComment = this.titleList.filter((posts) => {
+                return posts.id == post_id
+            })[0].comment_list.filter((comments) => {
+                return comments.id == comment_id;
+            })[0];
             this.isshade = true
             this.isspeak = true
             $.ajax({
@@ -289,8 +299,8 @@ var xm = new Vue({
                 url: `${api}/index/api/comments`,
                 async: true,
                 data: {
-                    post_id: 1,
-                    comment_id: 1,
+                    post_id: post_id,
+                    comment_id: comment_id,
                 },
                 dataType: 'json',
                 success: (res) => {
@@ -393,30 +403,54 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: (res) => {
-                    console.log(res)
-                    this.allList = res.data
+                    this.allList = res.data;
+                    this.goClose();
                 }
             })
         },
-        commentChange(index) { //发布评论
-            var list = this.titleList
-            var id = list[index].id
-            if (this.Pcomment !== "") {
+        commentChange(post_id,comment_id) { //发布评论
+            if(comment_id) {
+                if(this.replyComment.trim() == '') {
+                    alert('请输入回复内容');
+                    return false;
+                }
                 $.ajax({
-                    type: "post",
-                    url: `${api}/index/api/publishComment`,
-                    data: {
-                        post_id: id,
-                        content: this.Pcomment
+                    url:`${api}/index/api/replayComment`,
+                    type:'post',
+                    dataType:'json',
+                    data:{
+                        post_id:post_id,
+                        comment_id:comment_id,
+                        content:this.replyComment
                     },
-                    dataType: 'json',
-                    success: (res) => {
-                        this.allList = res.data
-                        this.Pcomment = ""
+                    success:(res) => {
+                        this.replyComment = '';
+                        this.currentActive = -1;
+                    },
+                    error:(err) => {
+    
                     }
                 })
-            } else {
-                alert("请填写内容")
+            }
+            else {
+                if (this.Pcomment !== "") {
+                    $.ajax({
+                        type: "post",
+                        url: `${api}/index/api/publishComment`,
+                        data: {
+                            post_id: post_id,
+                            content: this.Pcomment
+                        },
+                        dataType: 'json',
+                        success: (res) => {
+                            this.allList = res.data
+                            this.Pcomment = ""
+                            this.bannerChange(this.currentIndex);
+                        }
+                    })
+                } else {
+                    alert("请填写内容")
+                }   
             }
 
         },
@@ -448,24 +482,10 @@ var xm = new Vue({
             data: {},
             dataType: 'json',
             success: (res) => {
-                // console.log(res);
                 this.ForumCate = res.result;
+                this.bannerChange(0);
             }
-        })
-
-        // 获取论坛列表
-        $.ajax({
-            type: "post",
-            url: `${api}/index/api/getForumList`,
-            async: true,
-            data: {
-                cate_id: 1
-            },
-            dataType: 'json',
-            success: (res) => {
-                this.titleList = res.result;
-            }
-        })
+        });
 
         // 所有报备
         $.ajax({
