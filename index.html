@@ -107,7 +107,7 @@
                                     </li>
                                     <li>
                                         <img src="img/icon-06.png" alt="">
-                                        <span>{{item.records}}点赞</span>
+                                        <span @click="likePostOrComment(item.id,'',0)">{{item.records}}点赞</span>
                                     </li>
                                     <li @click="comChange(index)">
                                         <img src="img/评论.png" alt="">
@@ -124,7 +124,7 @@
                                        {{comment.content}}
                                     </p>
                                     <div class="reply">
-                                        <span>
+                                        <span class="pointer" @click="likePostOrComment('',comment.id,1)">
                                             <img src="img/icon-06.png" alt="">
                                             {{comment.phraise}}赞</span>
                                         <span @click="lookchange(item.id,comment.id)" class="pointer">查看回复</span>

@@ -472,6 +472,25 @@ var xm = new Vue({
                 }
             })
         },
+        //文章点赞
+        likePostOrComment(post_id,comment_id,type) {
+            var data = {};
+            $.ajax({
+                url:`${api}/index/api/phraisePost`,
+                type:'post',
+                dataType:'json',
+                data:{
+                    post_id:post_id,
+                    comment_id:comment_id
+                },
+                success:(res) => {
+                    this.bannerChange(this.currentIndex);
+                },
+                error:(err) => {
+
+                }
+            });
+        }
     },
     created() {
         // 获取论坛分类
