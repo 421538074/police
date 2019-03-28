@@ -29,7 +29,7 @@
             <div class="order_left">
                 <ul class="order_uu">
                     <li :class="{on:isstar}" @click="onli">所有报备</li>
-                    <li :class="{on:!isstar}" @click="onli">我的报备</li>
+                    <li :class="{on:!isstar}" @click="on">我的报备</li>
                 </ul>
             </div>
             <div class="order_right">
@@ -48,30 +48,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item,index) in list" :class="{'active':index%2==1}">
-                                    <td>2019-12-12 12:21</td>
-                                    <td>视屏监控类</td>
+                                <tr v-for="(item,index) in list" v-if="show" :class="{'active':index%2==1}">
+                                    <td>{{item.create_at | filterTime}}</td>
+                                    <td>{{item.name}}</td>
                                     <td>
-                                        <span>
-                                            2月28日，在《反家暴法》实施三周年前夕，
-                                            南京市第十届家庭学法竞赛启动仪式暨《反家暴法》实施三周年广场活动举办。
-                                            《反家暴法》实施以来，越来越多的人意识到，家庭暴力不再是“家务事”，
-                                            主动为自己维权、举报他人的市民
-                                            2月28日，在《反家暴法》实施三周年前夕，
-                                            南京市第十届家庭学法竞赛启动仪式暨《反家暴法》实施三周年广场活动举办。
-                                            《反家暴法》实施以来，越来越多的人意识到，家庭暴力不再是“家务事”，
-                                            主动为自己维权、举报他人的市民
-                                        
-                                        </span>
+                                        <span>{{item.content}}</span>
                                     </td>
-                                    <td>张三</td>
-                                    <td>未接单</td>
-                                    <td>接单</td>
+                                    <td>{{item.user}}</td>
+                                    <td :class="{red:item.status==0}">
+                                        {{item.status==0?"未接单":"接单"}}
+                                    </td>
+                                    <td @click="Repair(index)">接单</td>
+                                </tr>
+                                <tr v-for="(item,index) in list" v-if="!show" :class="{'active':index%2==1}">
+                                    <td>{{item.create_at | filterTime}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>
+                                        <span>{{item.content}}</span>
+                                    </td>
+                                    <td>{{item.user}}</td>
+                                    <td :class="{red:item.status==0}">
+                                        {{item.status==0?"未完成":"已完成"}}
+                                    </td>
+                                    <td @click="Repair(index)">完成</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="zxf_pagediv"></div>
+                    <!-- <div class="zxf_pagediv"></div> -->
                 </div>
             </div>
         </div>
@@ -83,8 +87,8 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/vue.js"></script>
 <script type="text/javascript" src="js/pagejs/zxf_page.js"></script>
+<script src="js/api.js"></script>
 <script src="js/order.js"></script>
-
 <script type="text/javascript">
     //翻页
     $(".zxf_pagediv").createPage({

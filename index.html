@@ -59,43 +59,28 @@
                 <div class="content_left">
                     <div class="banner">
                         <ul class="banner_uu">
-                            <li :class="{active:index == currentIndex}" v-for="(item,index) in ForumCate"
+                            <li :class="{active:index == currentIndex}" v-for="(item,index) in ForumCate.slice(0, 4)"
                                 @click="bannerChange(index)">
                                 {{item.title}}
                             </li>
-                            <!-- <li class="More">
-                                更多
-                                <div class="banner_more" v-show="ismore">
-                                    <span></span>
-                                    <ul class="more_uu">
-                                        <li class="">
-                                            科技中心
-                                        </li>
-                                        <li>
-                                            科技中心
-                                        </li>
-                                        <li>
-                                            科技中心
-                                        </li>
-                                        <li>
-                                            科技中心
-                                        </li>
-                                        <li>
-                                            科技中心
-                                        </li>
-                                        <li>
-                                            科技中心
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li> -->
+                            <div class="banner_more" v-show="ismore">
+                                <span></span>
+                                <ul class="more_uu">
+                                    <li v-for="(item,index) in ForumCate.slice(4, )" :class="{active:index == numIndex}"
+                                        @click="banner(index)">
+                                        {{item.title}}
+                                    </li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
 
                     <div class="content_scroll">
                         <div class="content_list" v-for="(item,index) in titleList">
                             <h4>{{item.title}}</h4>
-                            <p class="content_text" @click="readChange(item,index)" :class="{entable:item.entable}" v-html="item.content"></p>
+                            <p class="content_text" @click="readChange(item,index)" :class="{entable:item.entable}">
+                                {{item.content}}
+                            </p>
                             <div class="comment">
                                 <p>发布于{{item.create_at}}</p>
                                 <ul>
@@ -107,41 +92,41 @@
                                     </li>
                                     <li>
                                         <img src="img/icon-06.png" alt="">
-                                        <span @click="likePostOrComment(item.id,'',0)">{{item.records}}点赞</span>
+                                        <span>{{item.records}}点赞</span>
                                     </li>
                                     <li @click="comChange(index)">
                                         <img src="img/评论.png" alt="">
-                                        <span v-show="!iscomment">{{item.comment_list.length}}条评论</span>
+                                        <span v-show="!iscomment">{{item.comment_count}}条评论</span>
                                         <span v-show="iscomment">收起评论</span>
                                     </li>
                                 </ul>
                             </div>
 
                             <div class="comment_main" v-cloak v-show="commentActive ==index">
-                                <div class="comment_list" v-for="(comment,index) in item.comment_list">
-                                    <h5>{{comment.nickname}}</h5>
+                                <div class="comment_list" v-for="(item,index) in comlist">
+                                    <h5>张三</h5>
                                     <p>
-                                       {{comment.content}}
+                                        2月28日，在《反家暴法》实施三周年前夕，南京市第十届家庭学法竞赛启动
                                     </p>
                                     <div class="reply">
-                                        <span class="pointer" @click="likePostOrComment('',comment.id,1)">
+                                        <span>
                                             <img src="img/icon-06.png" alt="">
-                                            {{comment.phraise}}赞</span>
-                                        <span @click="lookchange(item.id,comment.id)" class="pointer">查看回复</span>
-                                        <span @click="gospeak(item.id,comment.id,index)" class="pointer">回复</span>
+                                            13赞</span>
+                                        <span @click="lookchange">查看回复</span>
+                                        <span @click="gospeak(index)">回复</span>
                                     </div>
 
                                     <div class="reply_one" v-if="currentActive==index">
-                                        <input type="text" placeholder="写下你的回复" v-model="replyComment">
+                                        <input type="text" placeholder="写下你的回复">
                                         <img src="img/表情.png" alt="">
-                                        <span @click="commentChange(item.id,comment.id)">发布</span>
+                                        <span>发布</span>
                                     </div>
                                 </div>
 
                                 <div class="comment_inp">
                                     <input type="text" v-model="Pcomment">
                                     <img src="img/表情.png" alt="">
-                                    <span @click="commentChange(item.id)">发布</span>
+                                    <span @click="commentChange(index)">发布</span>
                                 </div>
 
                             </div>
@@ -394,8 +379,7 @@
                 <div class="Croom_main">
                     <div class="Croom_main_left">
                         <ul class="Croom_uu">
-                            <li v-for="(item,index) in allRoom" 
-                            :class="{white:index==current}" @click="goRoom(index)">
+                            <li v-for="(item,index) in allRoom" :class="{white:index==current}" @click="goRoom(index)">
                                 {{item.topic_name}}
                             </li>
                         </ul>
@@ -478,8 +462,8 @@
             <div class="allReply" v-show="isall">
                 <div class="allReply_tag">
                     <ul class="allReply_uu">
-                        <li>所有报备</li>
-                        <li>我的报备</li>
+                        <li :class="{on:!isstar}" @click="onli">所有报备</li>
+                        <li :class="{on:isstar}" @click="on">我的报备</li>
                     </ul>
                     <div class="allReply_table">
                         <table>
@@ -494,18 +478,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in list">
-                                    <td>2019-12-12 12:21</td>
-                                    <td>视屏监控类</td>
-                                    <td>一二三四五六七八九十
-                                        一二三四五六七八九十
-                                        一二三四五六七八九十
-                                        一二三四五六七八九十
-                                        一二三四五六七八九十
+                                <tr v-for="item in repairList" v-if="!isstar">
+                                    <td>{{item.create_at | filterTime}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>
+                                        <span>{{item.content}}</span>
                                     </td>
-                                    <td>张三</td>
-                                    <td>未接单</td>
-                                    <td>李四</td>
+                                    <td>{{item.user}}</td>
+                                    <td :class="{red:item.status==0}">
+                                        {{item.status==0?"未接单":"接单"}}
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!-- 我的报备 -->
+                                <tr v-for="(item,index) in repairList" v-if="isstar">
+                                    <td>{{item.create_at | filterTime}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>
+                                        <span>{{item.content}}</span>
+                                    </td>
+                                    <td>{{item.user}}</td>
+                                    <td :class="{red:item.status==0}">
+                                        {{item.status==0?"未完成":"已完成"}}
+                                    </td>
+                                    <td @click="Repair(index)">完成</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -518,16 +514,18 @@
             <div class="see" v-show="isspeak">
                 <div class="see_text">
                     <div class="see_text_top">
-                        <h4>{{currentComment.nickname}}</h4>
-                        <span>{{currentComment.create_at | filterTime}}</span>
+                        <h4>张三</h4>
+                        <span>2019-03-11 12:31</span>
                     </div>
-                    <p v-html="currentComment.content"></p>
+                    <p>
+                        2月28日，在《反家暴法》实施三周年前夕
+                    </p>
                 </div>
                 <div class="see_main">
                     <ul class="see_uu" v-for="(item,index) in seelist">
                         <li>
                             <div class="see_uu_one">
-                                <h4>{{item.nickname}}回复{{currentComment.nickname}}</h4>
+                                <h4>{{item.nickname}}回复张三</h4>
                                 <span>{{item.create_at | filterTime}}</span>
                             </div>
                             <p v-html="item.content"></p>
@@ -614,7 +612,7 @@
             </div>
 
 
-            <div class="close pointer" @click="goClose">
+            <div class="close" @click="goClose">
             </div>
         </div>
         <!-- </transition> -->

@@ -10,21 +10,25 @@
 </head>
 <style>
     .btn {
-        active {
-            color: red;
-        }
+        
+    }
+    ul {
+        display: flex;
     }
 </style>
 
 <body>
     <div id="app">
-         <ul>
-            <li v-for="(item,index) in cartList">
-                <div class="btn" :class="{'active':item.active}"> hahahaha </div>
-                <button @click="togglePay(item,index)">点击</button>
-            </li>
+        <div>
+             <ul>
+                <li v-for="(item,index) in cartList">
+                    <div class="btn" :class="{'active':item.active}"> hahahaha </div>
+                    <button @click="togglePay(item,index)">点击</button>
+                </li>
 
-        </ul>
+            </ul>
+        </div>
+
     </div>
 
 
