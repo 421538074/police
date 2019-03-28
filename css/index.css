@@ -115,6 +115,7 @@
     height: 57px;
     background: rgba(255, 255, 255, 1);
     /* overflow-y: hidden; */
+    z-index: 111;
 }
 
 .banner_uu {
@@ -1468,7 +1469,7 @@
 }
 
 .allReply_table {
-    height: 717px;
+    height: 584px;
     overflow: hidden;
 }
 
@@ -1609,10 +1610,11 @@ td {
     transform: translate(-50%, -50%);
     overflow-x: hidden;
     overflow-y: scroll;
-    scrollbar-width:0;
+    scrollbar-width: 0;
     -ms-overflow-style: none;
 }
-.see::-webkit-scrollbar{
+
+.see::-webkit-scrollbar {
     width: 0;
 }
 
@@ -1846,7 +1848,7 @@ td {
     background: rgba(255, 255, 255, 1);
     box-shadow: 3px 3px 8px 1px rgba(126, 126, 126, 1);
     position: absolute;
-    right: 27%;
+    right: 42%;
     top: 80px;
 }
 
@@ -1934,14 +1936,15 @@ td {
 }
 
 .red {
-    color:red!important;
+    color: red !important;
 }
+
 .bod {
     overflow: hidden;
 }
 
 .on {
-    color: black!important;
+    color: black !important;
 }
 
 

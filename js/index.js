@@ -143,6 +143,8 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: (res) => {
+                    this.isshade =false
+                    this.isCase =false
                     this.roomList = res.data;
                 }
             })
