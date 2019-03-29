@@ -7,7 +7,7 @@ var xm = new Vue({
         isorder: false, //接单员登录
         Oname: '',
         Opsw: '',
-        ip: '',
+        ip: '127.0.0.1',
         Pname: '',
         Ppsw: '',
     },
@@ -25,8 +25,8 @@ var xm = new Vue({
         goPolice: function () {
             this.isrole = false
             this.ispolice = true
-            var ip = returnCitySN["cip"]
-            this.ip =ip
+            // var ip = returnCitySN["cip"]
+            // this.ip = ip
         },
         goMatron: function () {
             this.isrole = false
@@ -44,7 +44,7 @@ var xm = new Vue({
                 dataType: 'json',
                 success: function (res) {
                     console.log(res)
-                    window.location.href="order.html"
+                    window.location.href = "order.html"
                 }
             })
         },
@@ -61,7 +61,7 @@ var xm = new Vue({
                 dataType: 'json',
                 success: function (res) {
                     console.log(res)
-                    window.location.href="index.html"
+                    window.location.href = "index.html"
                 }
             })
         }
