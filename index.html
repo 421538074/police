@@ -461,8 +461,8 @@
                         <li>
                             <label class="forum_text">关键词：</label>
                             <div class="forum_tag">
-                                <span v-for="(item,index) in infoList" :class="{ sky:changeRed == index}"
-                                    @click="btnChange(index)">科技</span>
+                                <span v-for="(item,index) in ForumCate" :class="{sky:changeRed == index,pointer:true}"
+                                    @click="btnChange(item.id,index)">{{item.title}}</span>
                             </div>
                         </li>
                     </ul>
@@ -687,7 +687,7 @@
                     <ul class="see_uu" v-for="(item,index) in seelist">
                         <li>
                             <div class="see_uu_one">
-                                <h4>{{item.nickname}}回复{{currentComment.nickname}}</h4>
+                                <h4>{{item.nickname}}回复{{item.comment_user}}</h4>
                                 <span>{{item.create_at | filterTime}}</span>
                             </div>
                             <p v-html="item.content"></p>
