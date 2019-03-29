@@ -52,7 +52,8 @@ var xm = new Vue({
         replyComment:'',//回复评论的内容,
         currentComment:{},//当前查看的评论,
         currentPostId:'',
-        currentCommentId:''
+        currentCommentId:'',
+        selectedCatId:''
     },
     methods: {
         goClose() { //关闭遮罩
@@ -361,8 +362,9 @@ var xm = new Vue({
                 }
             })
         },
-        btnChange(index) { //写论坛 点击添加颜色
+        btnChange(selectedCatId,index) { //写论坛 点击添加颜色
             this.changeRed = index;
+            this.selectedCatId = selectedCatId;
         },
         tagChange() { //我的报备
             this.isshow = !this.isshow
@@ -434,6 +436,18 @@ var xm = new Vue({
             })
         },
         pulishChange() { //发布论坛
+            if(this.Ptitle.trim() == '') {
+                alert('请输入标题!');
+                return false;
+            }
+            else if(this.Pcontent.trim() == '') {
+                alert('请输入内容!');
+                return false;
+            }
+            else if(this.selectedCatId == '') {
+                alert('请选择分类标签');
+                return false;
+            }
             $.ajax({
                 type: "post",
                 url: `${api}/index/api/publishPost`,
@@ -575,6 +589,14 @@ var xm = new Vue({
         },
     },
     created() {
+        //初始化富文本编辑器
+        this.$nextTick(() => {
+            KindEditor.ready(function(K) {
+                window.editor = K.create('#Ftext',{
+                    items : ['bold','italic','underline','fontsize']
+                });
+            });
+        });
         // 获取论坛分类
         $.ajax({
             type: "post",
