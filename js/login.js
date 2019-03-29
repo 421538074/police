@@ -43,8 +43,12 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res)
-                    window.location.href = "order.html"
+                    if(res.code == 1) {
+                        window.location.href = 'order.html';
+                    }
+                    else {
+                        alert(res.msg);
+                    }
                 }
             })
         },
@@ -60,8 +64,12 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res)
-                    window.location.href = "index.html"
+                    if(res.code == 1) {
+                        window.location.href = 'index.html';
+                    }
+                    else {
+                        alert(res.msg);
+                    }
                 }
             })
         }

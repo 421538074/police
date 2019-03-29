@@ -234,11 +234,11 @@
                                     </li>
                                     <li>
                                         <img src="img/icon-06.png" alt="">
-                                        <span>{{item.records}}点赞</span>
+                                        <span @click="likePostOrComment(item.id,'',0)">{{item.records}}点赞</span>
                                     </li>
                                     <li @click="comChange(index)">
                                         <img src="img/评论.png" alt="">
-                                        <span v-show="!iscomment">{{item.comment_count}}条评论</span>
+                                        <span v-show="!iscomment">{{item.comment_list.length}}条评论</span>
                                         <span v-show="iscomment">收起评论</span>
                                     </li>
                                 </ul>
@@ -262,7 +262,7 @@
                                     <div class="reply_one" v-if="currentActive==index">
                                         <input type="text" placeholder="写下你的回复" v-model="replyComment">
                                         <img src="img/表情.png" alt="">
-                                        <span @click="commentChange(item.id,comment.id)">发布</span>
+                                        <span @click="commentChange(item.id,comment.id,item.uid)">发布</span>
                                     </div>
                                 </div>
 
@@ -294,29 +294,6 @@
                                 <p>去报备</p>
                             </li>
                         </ul>
-                    </div>
-
-                    <!-- 聊天室 -->
-                    <div class="chatRoom">
-                        <div class="chat_user">
-                            <span><img src="" alt=""></span>
-                            <span>张三</span>
-                            <span @click="creatChange"></span>
-                        </div>
-                        <div class="chat_room">
-                            <ul class="chat_room_uu">
-                                <li v-for="(item,index) in chatList">
-                                    <div class="chat_room_uu_left">
-                                        <p>{{item.title}}</p>
-                                        <span>{{item.topic_name}}</span>
-                                        <span>13人正在聊天</span>
-                                    </div>
-                                    <div class="chat_room_uu_right" @click="goInchange(index)">
-                                    </div>
-                                </li>
-                            </ul>
-                            <p class="chat_more" @click="allChat">所有聊天室>></p>
-                        </div>
                     </div>
 
                     <!-- 应用中心 -->
