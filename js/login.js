@@ -43,7 +43,12 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res)
+                    if(res.code == 1) {
+                        window.location.href = 'order.html';
+                    }
+                    else {
+                        alert(res.msg);
+                    }
                 }
             })
         },
@@ -53,13 +58,18 @@ var xm = new Vue({
                 url: `${api}/index/api/policeLogin`,
                 async: true,
                 data: {
-                    ip: ip,
+                    ip: this.ip,
                     name: this.Pname,
                     password: this.Ppsw
                 },
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res)
+                    if(res.code == 1) {
+                        window.location.href = 'index.html';
+                    }
+                    else {
+                        alert(res.msg);
+                    }
                 }
             })
         }
