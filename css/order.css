@@ -151,6 +151,7 @@ td {
 .order_table {
     height: 585px;
     overflow: hidden;
+    margin-bottom: 24px;
 }
 
 
@@ -162,4 +163,7 @@ td {
 
 .active {
     background: #F0F0F0;
+}
+.red {
+    color: red;
 }

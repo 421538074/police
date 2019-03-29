@@ -20,6 +20,7 @@ var xm = new Vue({
         ispass: false, //修改密码
         isshow: false, //报备TAG
         isNone: false, //未搜索到
+        isstar: false, //所有报备
         ForumCate: [], //论坛分类
         titleList: [{}, {}], //论坛列表
         allList: [], //报备列表
@@ -32,11 +33,13 @@ var xm = new Vue({
         roomList: [], //聊天类型分类
         repairSorts: [], //保修类型
         allRoom: [], //所有聊天室
+        repairList: [], //所有报备
         current: 0,
         changeRed: -1,
         currentActive: -1,
         oneIndex: -1,
         currentIndex: 0,
+        numIndex: -1,
         commentActive: -1,
         Ptitle: '', //论坛标题
         Pcontent: '', //论坛内容
@@ -141,6 +144,8 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: (res) => {
+                    this.isshade =false
+                    this.isCase =false
                     this.roomList = res.data;
                 }
             })
@@ -148,6 +153,18 @@ var xm = new Vue({
         allChange() { //所有报备
             this.isshade = true
             this.isall = true
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/repairLists`,
+                async: true,
+                data: {},
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                    this.repairList = res.data;
+                }
+            })
+
         },
         creatChange() { //打开创建聊天室
             this.isshade = true
@@ -375,13 +392,14 @@ var xm = new Vue({
                 })
             }
         },
-        bannerChange(index) { // 获取论坛分类
-            if (index != this.currentIndex) {
-                this.currentIndex = index;
+        banner(index) {
+            // this.ismore =false
+            if (index != this.numIndex) {
+                this.numIndex = index;
             }
+            var num = index + 4
             var list = this.ForumCate
-            var id = list[index].id
-            console.log(id)
+            var id = list[num].id
             $.ajax({
                 type: "post",
                 url: `${api}/index/api/getForumList`,
@@ -390,7 +408,30 @@ var xm = new Vue({
                 },
                 dataType: 'json',
                 success: (res) => {
-                    this.titleList =res.result
+                    this.titleList = res.result
+                }
+            })
+        },
+        bannerChange(index) { // 获取论坛分类
+            if (index != this.currentIndex) {
+                this.currentIndex = index;
+            }
+            if (index == 3) {
+                this.ismore = !this.ismore
+            } else {
+                this.ismore = false
+            }
+            var list = this.ForumCate
+            var id = list[index].id
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/getForumList`,
+                data: {
+                    cate_id: id
+                },
+                dataType: 'json',
+                success: (res) => {
+                    this.titleList = res.result
                 }
             })
         },
@@ -438,7 +479,7 @@ var xm = new Vue({
                         comment_uid:uid,
                         content:this.replyComment
                     },
-                    success:(res) => {
+                    success: (res) => {
                         this.replyComment = '';
                         if(type == 1) {
                             this.oneIndex = -1;
@@ -448,12 +489,11 @@ var xm = new Vue({
                             this.currentActive = -1;
                         }
                     },
-                    error:(err) => {
-    
+                    error: (err) => {
+
                     }
                 })
-            }
-            else {
+            } else {
                 if (this.Pcomment !== "") {
                     $.ajax({
                         type: "post",
@@ -464,14 +504,13 @@ var xm = new Vue({
                         },
                         dataType: 'json',
                         success: (res) => {
-                            this.allList = res.data
                             this.Pcomment = ""
                             this.bannerChange(this.currentIndex);
                         }
                     })
                 } else {
                     alert("请填写内容")
-                }   
+                }
             }
 
         },
@@ -494,15 +533,15 @@ var xm = new Vue({
             })
         },
         //文章点赞
-        likePostOrComment(post_id,comment_id,type) {
+        likePostOrComment(post_id, comment_id, type) {
             var data = {};
             $.ajax({
-                url:`${api}/index/api/phraisePost`,
-                type:'post',
-                dataType:'json',
-                data:{
-                    post_id:post_id,
-                    comment_id:comment_id
+                url: `${api}/index/api/phraisePost`,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    post_id: post_id,
+                    comment_id: comment_id
                 },
                 success:(res) => {
                     if(type == 1) {
@@ -513,11 +552,41 @@ var xm = new Vue({
                         this.bannerChange(this.currentIndex);
                     }
                 },
-                error:(err) => {
+                error: (err) => {
 
                 }
             });
-        }
+        },
+        onli() {
+            this.isstar = !this.isstar
+            this.show = !this.show
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/repairLists`,
+                async: true,
+                data: {},
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                    this.list = res.data
+                }
+            })
+        },
+        on() {
+            this.isstar = !this.isstar
+            this.show = !this.show
+            $.ajax({
+                type: "post",
+                url: `${api}/index/api/myRepairs`,
+                async: true,
+                data: {},
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res)
+                    this.list = res.data
+                }
+            })
+        },
     },
     created() {
         //初始化富文本编辑器
@@ -536,7 +605,11 @@ var xm = new Vue({
             data: {},
             dataType: 'json',
             success: (res) => {
-                this.ForumCate = res.result;
+                var temp = res.result;
+                temp.splice(3, 0, {
+                    title: "更多"
+                })
+                this.ForumCate = temp;
                 this.bannerChange(0);
             }
         });
@@ -549,6 +622,7 @@ var xm = new Vue({
             data: {},
             dataType: 'json',
             success: (res) => {
+                console.log(res)
                 this.allList = res.data
             }
         })
@@ -626,16 +700,6 @@ $("#testSelect").click(function () {
     }
 })
 
-
-
-$(".More").click(function () {
-    xm.ismore = !xm.ismore
-})
-
-$(".More").siblings().click(function () {
-    console.log(111)
-    $(".banner_more").hide()
-})
 
 
 //封装一个限制字数方法

@@ -12,25 +12,27 @@ var xm = new Vue({
         Ppsw: '',
     },
     methods: {
-        goBack:function() {
+        goBack: function () {
             this.ispolice = false
             this.ismatron = false
             this.isorder = false
             this.isrole = true
         },
-        goOrder:function() {
+        goOrder: function () {
             this.isrole = false
             this.isorder = true
         },
-        goPolice:function() {
+        goPolice: function () {
             this.isrole = false
             this.ispolice = true
+            var ip = returnCitySN["cip"]
+            this.ip =ip
         },
-        goMatron:function() {
+        goMatron: function () {
             this.isrole = false
             this.ismatron = true
         },
-        orderEnter:function() { //接单员登录
+        orderEnter: function () { //接单员登录
             $.ajax({
                 type: "post",
                 url: `${api}/index/api/receiverLogin`,
@@ -40,24 +42,23 @@ var xm = new Vue({
                     password: this.Opsw
                 },
                 dataType: 'json',
-                success: function(res){
+                success: function (res) {
                     console.log(res)
                 }
             })
         },
-        policeEnter:function() { //警员登录
-            // console.log(this.ip)
+        policeEnter: function () { //警员登录
             $.ajax({
                 type: "post",
                 url: `${api}/index/api/policeLogin`,
                 async: true,
                 data: {
-                    ip: this.ip,
+                    ip: ip,
                     name: this.Pname,
                     password: this.Ppsw
                 },
                 dataType: 'json',
-                success: function(res) {
+                success: function (res) {
                     console.log(res)
                 }
             })
