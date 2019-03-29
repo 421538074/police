@@ -53,7 +53,7 @@ var xm = new Vue({
         currentComment: {}, //当前查看的评论,
         currentPostId: '',
         currentCommentId: '',
-        selectedCatId: ''
+        selectedCatId: '',
     },
     methods: {
         goClose() { //关闭遮罩

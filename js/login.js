@@ -67,6 +67,5 @@ var xm = new Vue({
         }
     },
     created() {
-
     }
 })
