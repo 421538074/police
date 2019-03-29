@@ -296,33 +296,6 @@
                         </ul>
                     </div>
 
-                    <!-- 所有报备列表 -->
-                    <div class="report">
-                        <div class="report_banner">
-                            <ul>
-                                <li :class="{black:!isshow}" @click="tagChange">所有报备</li>
-                                <li :class="{black:isshow}" @click="tagChange">我的报备</li>
-                            </ul>
-                        </div>
-
-                        <div class="report_list">
-                            <ul class="report_list_uu">
-                                <li>
-                                    <p>报备内容</p>
-                                    <p>报备情况</p>
-                                    <p>处理人</p>
-                                </li>
-                                <li v-for="(item,index) in allList">
-                                    <span>{{item.title}} {{item.create_at}}</span>
-                                    <span
-                                        :class="{red:item.status==0}">{{item.name == null ? '未接单' : item.status == 0 ? '未解决' : '已解决'}}</span>
-                                    <span>{{item.name}}</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <p class="report_look" @click="allChange">查看全部>></p>
-                    </div>
-
                     <!-- 聊天室 -->
                     <div class="chatRoom">
                         <div class="chat_user">

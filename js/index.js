@@ -391,7 +391,7 @@ var xm = new Vue({
             }
         },
         banner(index) {
-            // this.ismore =false
+            this.ismore =false
             if (index != this.numIndex) {
                 this.numIndex = index;
             }
